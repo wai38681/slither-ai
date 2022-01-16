@@ -43,8 +43,8 @@ Snake = function(game, spriteKey, x, y) {
     this.head.snake = this;
 
     this.lastHeadPosition = new Phaser.Point(this.head.body.x, this.head.body.y);
-    //add 30 sections behind the head
-    this.initSections(30);
+    //add 5 sections behind the head
+    this.initSections(5);
 
     //initialize the eyes
     this.eyes = new EyePair(this.game, this.head, this.scale);
