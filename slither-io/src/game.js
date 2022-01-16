@@ -40,19 +40,28 @@ Game.prototype = {
         //create player
         var snake = new PlayerSnake(this.game, 'circle', 0, 0);
         this.game.camera.follow(snake.head);
+        snake.head.body.setCollisionGroup(this.snakeHeadCollisionGroup);
+        snake.head.body.collides([this.foodCollisionGroup]);
+        //callback for when a snake is destroyed
+        snake.addDestroyedCallback(this.snakeDestroyed, this);
 
         //create bots
-        new BotSnake(this.game, 'circle', -200, 0);
-        new BotSnake(this.game, 'circle', 200, 0);
+        // new BotSnake(this.game, 'circle', -200, 0);
+        // new BotSnake(this.game, 'circle', 200, 0);
+        this.generateRandomSanke();
+        this.generateRandomSanke();
+        this.generateRandomSanke();
+        this.generateRandomSanke();
+        this.generateRandomSanke();
 
         //initialize snake groups and collision
-        for (var i = 0 ; i < this.game.snakes.length ; i++) {
+        /* for (var i = 0 ; i < this.game.snakes.length ; i++) {
             var snake = this.game.snakes[i];
             snake.head.body.setCollisionGroup(this.snakeHeadCollisionGroup);
             snake.head.body.collides([this.foodCollisionGroup]);
             //callback for when a snake is destroyed
             snake.addDestroyedCallback(this.snakeDestroyed, this);
-        }
+        } */
     },
     /**
      * Main update loop
@@ -89,5 +98,25 @@ Game.prototype = {
                 snake.headPath[i].y + Util.randomInt(-10,10)
             );
         }
+
+        //regenerate a snake somewhere else
+        this.generateRandomSanke();
+    },
+
+    generateRandomSanke: function() {
+        let x;
+        let y;
+        do {
+            x = Util.randomInt(-this.game.width, this.game.width);
+            y = Util.randomInt(-this.game.height, this.game.height);
+        } while (false/* (x) && (y) */); // generate outside visible area on the screen (and maybe detect no collision)
+
+        let snake = new BotSnake(this.game, 'circle', x, y);
+        snake.head.body.setCollisionGroup(this.snakeHeadCollisionGroup);
+        snake.head.body.collides([this.foodCollisionGroup]);
+        //callback for when a snake is destroyed
+        snake.addDestroyedCallback(this.snakeDestroyed, this);
+        console.log(`New bot generated at (${x}, ${y})`)
     }
+
 };
